@@ -1,3 +1,3 @@
 #!/bin/bash
-nohup python birdybot.py & > /dev/null;
+nohup python birdybot.py &
 echo "BirdyBot is now active!" 
