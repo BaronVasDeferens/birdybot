@@ -7,21 +7,6 @@ const port = 3000
 fs.readFile('index.html', (err, html) => {
 	if (err) {throw err; }
 
-
-	fs.readdir(".", (err, files) => {
-		var pictureFileNames = "";
-
-		files.forEach(file => {
-			if (file.endsWith(".jpg")) {
-				pictureFileNames +=
-				("<a href=\"" + file + "\"><img src=\"" + file + "\" width=\"50\" height=\"50\"></img></a>\n");
-			}
-		});
-
-		html = html.toString().replace("%%IMAGE_LIST%%", pictureFileNames);
-	});
-
-
 	const server = http.createServer((req, res) => {
 
 		// TODO : spend some more time examining the requests to learn more about HTTP!
@@ -41,9 +26,23 @@ fs.readFile('index.html', (err, html) => {
 				});
 			}
 			else { // A request for text arrives
-				res.writeHead(200, {'Content-type' : 'text/html'});
-				res.write(html);
-				res.end();
+
+				fs.readdir(".", (err, files) => {
+					var pictureFileNames = "";
+			
+					files.forEach(file => {
+						if (file.endsWith(".jpg")) {
+							pictureFileNames +=
+							("<a href=\"" + file + "\"><img src=\"" + file + "\" width=\"50\" height=\"50\"></img></a>\n");
+						}
+					});
+			
+					html = html.toString().replace("%%IMAGE_LIST%%", pictureFileNames);
+
+					res.writeHead(200, {'Content-type' : 'text/html'});
+					res.write(html);
+					res.end();
+				});
 			}
 		}
 	});
